@@ -43,6 +43,8 @@ anychart.onDocumentLoad(function () {
   const combSort = (arr) => {
     sortButton.disabled = resetButton.disabled = sizeSelect.disabled = true;
     let iteration = 1;
+    let numberOfPermutations = 0;
+    let numberOfComparisons = 0;
     const size = arr.length;
     const factor = 1.247;
     let gapFactor = size / factor;
@@ -50,8 +52,10 @@ anychart.onDocumentLoad(function () {
     while (gapFactor > 1) {
       const gap = Math.round(gapFactor);
       for (let i = 0, j = gap; j < size; i++, j++) {
+        numberOfComparisons++;
         selectTimeout(iteration, i, j);
         if (arr[i] > arr[j]) {
+          numberOfPermutations++;
           [arr[i], arr[j]] = [arr[j], arr[i]];
           changeTimeout(arr, iteration);
         }
@@ -63,7 +67,10 @@ anychart.onDocumentLoad(function () {
     setTimeout(() => {
       series.select([]);
       resetButton.disabled = sizeSelect.disabled = false;
+      alert(`Number of Comparisons: ${numberOfComparisons}`);
+      alert(`Number of Permutations: ${numberOfPermutations}`);
     }, iteration * delay);
+    
     return arr;
   };
 
